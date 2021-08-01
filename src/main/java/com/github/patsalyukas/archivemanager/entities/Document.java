@@ -11,6 +11,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @ToString
+@RequiredArgsConstructor
 public class Document {
 
     @Id
