@@ -1,6 +1,7 @@
 package com.github.patsalyukas.archivemanager.services;
 
 import com.github.patsalyukas.archivemanager.entities.Document;
+import com.github.patsalyukas.archivemanager.exceptions.DocumentExist;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.DocumentRepository;
 import lombok.AllArgsConstructor;
@@ -21,13 +22,19 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document create(Document document) {
+        if (findByCode(document.getCode()) != null) {
+            throw new DocumentExist();
+        }
         return documentRepository.save(document);
     }
 
     @Override
-    public boolean update(Long id, Document document) {
-        //TODO
-        return true;
+    public Document update(Long id, Document document) {
+        if (!documentRepository.existsById(id)) {
+            throw new DocumentNotFoundException();
+        }
+        document.setId(id);
+        return documentRepository.save(document);
     }
 
     @Override

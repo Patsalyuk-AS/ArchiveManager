@@ -27,8 +27,8 @@ public class DocumentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable Long id, @RequestBody Document document) {
-        return documentService.update(id, document) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    public ResponseEntity<Document> update(@PathVariable Long id, @RequestBody Document document) {
+        return new ResponseEntity<>(documentService.update(id, document), HttpStatus.OK);
     }
 
     @GetMapping("/")

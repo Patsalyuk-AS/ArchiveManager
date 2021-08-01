@@ -10,7 +10,7 @@ public interface DocumentService {
 
     Document create(Document document);
 
-    boolean update(Long id, Document document);
+    Document update(Long id, Document document);
 
     List<Document> getDocumentsInBox(Long id);
 
