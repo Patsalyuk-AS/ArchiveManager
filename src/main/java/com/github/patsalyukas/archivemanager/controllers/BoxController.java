@@ -16,18 +16,17 @@ public class BoxController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Box> getBoxByCode(@PathVariable Long id) {
-        return new ResponseEntity<>(boxService.getBoxByCode(id), HttpStatus.OK);
+        return new ResponseEntity<>(boxService.getBoxByID(id), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<HttpStatus> create(@RequestBody Box box) {
-        boxService.create(box);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Box> create(@RequestBody Box box) {
+        return new ResponseEntity<>(boxService.create(box), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable Long id) {
-        return boxService.update(id) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    public ResponseEntity<Box> update(@PathVariable Long id, @RequestBody Box box) {
+        return new ResponseEntity<>(boxService.update(id, box), HttpStatus.OK);
     }
 
 }

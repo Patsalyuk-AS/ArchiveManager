@@ -1,5 +1,6 @@
 package com.github.patsalyukas.archivemanager.services;
 
+import com.github.patsalyukas.archivemanager.entities.Box;
 import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentExist;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundException;
@@ -14,6 +15,7 @@ import java.util.List;
 public class DocumentServiceImpl implements DocumentService {
 
     DocumentRepository documentRepository;
+    BoxService boxService;
 
     @Override
     public Document getDocumentByID(Long id) {
@@ -22,7 +24,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document create(Document document) {
-        if (findByCode(document.getCode()) != null) {
+        if (documentRepository.existsByCode(document.getCode())) {
             throw new DocumentExist();
         }
         return documentRepository.save(document);
@@ -38,23 +40,29 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Document> getDocumentsInBox(Long id) {
-        //TODO
-        return null;
+    public List<Document> getDocumentsInBox(Long boxId) {
+        Box box = boxService.getBoxByID(boxId);
+        return documentRepository.findByBox(box).orElseThrow(DocumentNotFoundException::new);
     }
 
     @Override
-    public boolean putDocumentInBox(Long id, Document document) {
-        return false;
+    public Document putDocumentInBox(Long boxId, Document document) {
+        Box box = boxService.getBoxByID(boxId);
+        Document documentFromDB = findByCode(document.getCode());
+        document.setBox(box);
+        return update(documentFromDB.getId(), document);
     }
 
     @Override
     public Document extractDocumentFromBox(Long id) {
-        return null;
+        Document documentFromDB = getDocumentByID(id);
+        documentFromDB.setBox(null);
+        return update(id, documentFromDB);
     }
 
     @Override
     public Document findByCode(String code) {
-        return documentRepository.findByCode(code);
+        return documentRepository.findByCode(code).orElseThrow(DocumentNotFoundException::new);
     }
+
 }

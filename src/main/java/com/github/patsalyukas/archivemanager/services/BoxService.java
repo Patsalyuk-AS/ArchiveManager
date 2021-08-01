@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BoxService {
 
-    Box getBoxByCode(Long id);
+    Box getBoxByID(Long id);
 
-    void create(Box box);
+    Box create(Box box);
 
-    boolean update(Long id);
+    Box update(Long id, Box box);
+
+    Box findByCode(String code);
 
 }

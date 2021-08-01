@@ -12,9 +12,9 @@ public interface DocumentService {
 
     Document update(Long id, Document document);
 
-    List<Document> getDocumentsInBox(Long id);
+    List<Document> getDocumentsInBox(Long boxId);
 
-    boolean putDocumentInBox(Long id, Document document);
+    Document putDocumentInBox(Long boxId, Document document);
 
     Document extractDocumentFromBox(Long id);
 

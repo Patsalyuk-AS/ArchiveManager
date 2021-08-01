@@ -1,9 +1,6 @@
 package com.github.patsalyukas.archivemanager.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -13,11 +10,14 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
+@ToString
 public class Box {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
+    @ToString.Exclude
     private long id;
 
     @NonNull
