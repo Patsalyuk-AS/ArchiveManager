@@ -30,9 +30,7 @@ class DocumentServiceImplTest {
     @Test
     void getDocumentByID() {
         Document document = documentService.getDocumentByID(2L);
-        Document documentTest = new Document();
-        documentTest.setName("Document2");
-        documentTest.setCode("d000002");
+        Document documentTest = new Document("Document2", "d000002");
         assertEquals(documentTest, document);
     }
 

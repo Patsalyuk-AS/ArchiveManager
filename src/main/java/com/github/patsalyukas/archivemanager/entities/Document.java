@@ -9,8 +9,8 @@ import java.util.Objects;
 @Table(name = "Documents")
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class Document {
 
