@@ -26,9 +26,8 @@ public class BoxController {
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id) {
-        boxService.update(id);
+    public ResponseEntity<HttpStatus> update(@PathVariable Long id) {
+        return boxService.update(id) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-
 
 }

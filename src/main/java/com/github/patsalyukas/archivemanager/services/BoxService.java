@@ -10,6 +10,6 @@ public interface BoxService {
 
     void create(Box box);
 
-    void update(Long id);
+    boolean update(Long id);
 
 }

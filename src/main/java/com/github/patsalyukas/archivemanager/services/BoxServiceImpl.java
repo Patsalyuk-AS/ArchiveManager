@@ -23,8 +23,9 @@ public class BoxServiceImpl implements BoxService {
     }
 
     @Override
-    public void update(Long id) {
+    public boolean update(Long id) {
         //TODO
+        return true;
     }
 
 }
