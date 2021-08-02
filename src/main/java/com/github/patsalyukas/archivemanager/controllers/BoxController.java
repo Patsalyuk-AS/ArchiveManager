@@ -18,7 +18,7 @@ public class BoxController {
     MappingBoxService mappingBoxService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoxDTO> getBoxByCode(@PathVariable Long id) {
+    public ResponseEntity<BoxDTO> getBoxById(@PathVariable Long id) {
         Box box = boxService.getBoxByID(id);
         return new ResponseEntity<>(mappingBoxService.mapToBoxDTO(box), HttpStatus.OK);
     }
