@@ -6,9 +6,9 @@ import com.github.patsalyukas.archivemanager.services.DocumentService;
 import com.github.patsalyukas.archivemanager.services.MappingDocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,46 +21,43 @@ public class DocumentController {
     MappingDocumentService mappingDocumentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentDTO> getDocumentByID(@PathVariable Long id) {
+    public DocumentDTO getDocumentByID(@PathVariable Long id) {
         Document document = documentService.getDocumentByID(id);
-        return new ResponseEntity<>(mappingDocumentService.mapToDocumentDTO(document), HttpStatus.OK);
+        return mappingDocumentService.mapToDocumentDTO(document);
     }
 
     @PostMapping("/")
-    public ResponseEntity<DocumentDTO> create(@RequestBody DocumentDTO documentDTO) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public DocumentDTO create(@RequestBody DocumentDTO documentDTO) {
         Document document = documentService.create(mappingDocumentService.mapToDocumentEntity(documentDTO));
-        return new ResponseEntity<>(mappingDocumentService.mapToDocumentDTO(document), HttpStatus.OK);
+        return mappingDocumentService.mapToDocumentDTO(document);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocumentDTO> update(@PathVariable Long id, @RequestBody DocumentDTO documentDTO) {
+    public DocumentDTO update(@PathVariable Long id, @RequestBody DocumentDTO documentDTO) {
         Document document = documentService.update(id, mappingDocumentService.mapToDocumentEntity(documentDTO));
-        return new ResponseEntity<>(mappingDocumentService.mapToDocumentDTO(document), HttpStatus.OK);
+        return mappingDocumentService.mapToDocumentDTO(document);
     }
 
     @GetMapping("/box/{boxId}")
-    public ResponseEntity<List<DocumentDTO>> getDocumentsInBox(@PathVariable Long boxId) {
+    public List<DocumentDTO> getDocumentsInBox(@PathVariable Long boxId) {
         List<Document> documents = documentService.getDocumentsInBox(boxId);
         if (documents == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return Collections.emptyList();
         }
-        List<DocumentDTO> documentDTOList = documents.stream().map(mappingDocumentService::mapToDocumentDTO).collect(Collectors.toList());
-        return new ResponseEntity<>(documentDTOList, HttpStatus.OK);
+        return documents.stream().map(mappingDocumentService::mapToDocumentDTO).collect(Collectors.toList());
     }
 
     @PutMapping("/box/{boxId}")
-    public ResponseEntity<DocumentDTO> putDocumentInBox(@PathVariable Long boxId, @RequestBody DocumentDTO documentDTO) {
+    public DocumentDTO putDocumentInBox(@PathVariable Long boxId, @RequestBody DocumentDTO documentDTO) {
         Document document = documentService.putDocumentInBox(boxId, mappingDocumentService.mapToDocumentEntity(documentDTO));
-        return new ResponseEntity<>(mappingDocumentService.mapToDocumentDTO(document), HttpStatus.OK);
+        return mappingDocumentService.mapToDocumentDTO(document);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DocumentDTO> extractDocumentFromBox(@PathVariable Long id) {
+    public DocumentDTO extractDocumentFromBox(@PathVariable Long id) {
         Document document = documentService.extractDocumentFromBox(id);
-        if (document == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(mappingDocumentService.mapToDocumentDTO(document), HttpStatus.OK);
+        return mappingDocumentService.mapToDocumentDTO(document);
     }
 
 }

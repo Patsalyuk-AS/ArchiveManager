@@ -6,7 +6,6 @@ import com.github.patsalyukas.archivemanager.services.BoxService;
 import com.github.patsalyukas.archivemanager.services.MappingBoxService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,21 +17,22 @@ public class BoxController {
     MappingBoxService mappingBoxService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoxDTO> getBoxById(@PathVariable Long id) {
+    public BoxDTO getBoxById(@PathVariable Long id) {
         Box box = boxService.getBoxByID(id);
-        return new ResponseEntity<>(mappingBoxService.mapToBoxDTO(box), HttpStatus.OK);
+        return (mappingBoxService.mapToBoxDTO(box));
     }
 
     @PostMapping("/")
-    public ResponseEntity<BoxDTO> create(@RequestBody BoxDTO boxDTO) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public BoxDTO create(@RequestBody BoxDTO boxDTO) {
         Box box = mappingBoxService.mapToBoxEntity(boxDTO);
-        return new ResponseEntity<>(mappingBoxService.mapToBoxDTO(boxService.create(box)), HttpStatus.CREATED);
+        return mappingBoxService.mapToBoxDTO(boxService.create(box));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BoxDTO> update(@PathVariable Long id, @RequestBody BoxDTO boxDTO) {
+    public BoxDTO update(@PathVariable Long id, @RequestBody BoxDTO boxDTO) {
         Box box = boxService.update(id, mappingBoxService.mapToBoxEntity(boxDTO));
-        return new ResponseEntity<>(mappingBoxService.mapToBoxDTO(box), HttpStatus.OK);
+        return mappingBoxService.mapToBoxDTO(box);
     }
 
 }
