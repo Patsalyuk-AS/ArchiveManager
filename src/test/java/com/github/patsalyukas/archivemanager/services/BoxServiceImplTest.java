@@ -30,7 +30,8 @@ class BoxServiceImplTest {
     @Test
     void create() {
         Box box = new Box("Test", "t0001");
-        boxService.create(box);
+        Box createdBox = boxService.create(box);
+        assertEquals(box, createdBox);
         assertNotNull(boxService.findByCode("t0001"));
         Box existBox = new Box("Test", "t0001");
         assertThrows(BoxExist.class, () -> boxService.create(existBox));
