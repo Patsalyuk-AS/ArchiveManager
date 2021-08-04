@@ -3,7 +3,6 @@ package com.github.patsalyukas.archivemanager.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "Documents")
@@ -12,6 +11,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(exclude = {"id", "box"})
 public class Document {
 
     @Id
@@ -33,16 +33,4 @@ public class Document {
     @ToString.Exclude
     private Box box;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Document document = (Document) o;
-        return Objects.equals(name, document.name) && Objects.equals(code, document.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, code);
-    }
 }

@@ -6,6 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"boxDTO"})
 public class DocumentDTO {
 
     @NonNull
