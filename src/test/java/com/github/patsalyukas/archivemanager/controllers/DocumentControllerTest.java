@@ -2,11 +2,14 @@ package com.github.patsalyukas.archivemanager.controllers;
 
 import com.github.patsalyukas.archivemanager.dto.DocumentDTO;
 import com.github.patsalyukas.archivemanager.services.DocumentService;
+import com.github.patsalyukas.archivemanager.services.MappingDocumentService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -28,6 +31,9 @@ class DocumentControllerTest {
     @Autowired
     DocumentController documentController;
 
+    @Autowired
+    MappingDocumentService mappingDocumentService;
+
     @Test
     void getDocumentByID() {
         Long goodId = 3L;
@@ -43,7 +49,14 @@ class DocumentControllerTest {
 
     @Test
     void create() {
-        //TODO
+        String url = "/documents/";
+        DocumentDTO goodDocumentDTO = new DocumentDTO("DocumentTest", "d00000Test");
+        HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(goodDocumentDTO);
+        ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.exchange(url, HttpMethod.POST, goodEntity, DocumentDTO.class);
+        DocumentDTO documentDTOFromDB = mappingDocumentService.mapToDocumentDTO(documentService.findByCode(goodDocumentDTO.getCode()));
+        assertEquals(goodDocumentDTO, goodResponse.getBody());
+        assertEquals(goodDocumentDTO, documentDTOFromDB);
+        assertEquals(HttpStatus.CREATED, goodResponse.getStatusCode());
     }
 
     @Test
