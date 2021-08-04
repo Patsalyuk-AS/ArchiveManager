@@ -35,10 +35,11 @@ class BoxControllerTest {
     @Test
     void getBoxById() {
         BoxDTO boxDTO = new BoxDTO("Box3", "b0003");
-        Long idFound = 3L;
-        Long idNotFound = 10L;
-        ResponseEntity<BoxDTO> entityFound = testRestTemplate.getForEntity(String.format("/boxes/%d", idFound), BoxDTO.class);
-        ResponseEntity<BoxDTO> entityNotFound = testRestTemplate.getForEntity(String.format("/boxes/%d", idNotFound), BoxDTO.class);
+        Long goodId = 3L;
+        Long badId = 10L;
+        String url = "/boxes/%d";
+        ResponseEntity<BoxDTO> entityFound = testRestTemplate.getForEntity(String.format(url, goodId), BoxDTO.class);
+        ResponseEntity<BoxDTO> entityNotFound = testRestTemplate.getForEntity(String.format(url, badId), BoxDTO.class);
         assertEquals(boxDTO, entityFound.getBody());
         assertEquals(HttpStatus.OK, entityFound.getStatusCode());
         assertEquals(HttpStatus.NOT_FOUND, entityNotFound.getStatusCode());
@@ -47,8 +48,9 @@ class BoxControllerTest {
     @Test
     void create() {
         BoxDTO goodBoxDTO = new BoxDTO("test", "t0001");
+        String url = "/boxes/";
         HttpEntity<BoxDTO> goodEntity = new HttpEntity<>(goodBoxDTO);
-        ResponseEntity<BoxDTO> goodResponse = testRestTemplate.exchange("/boxes/", HttpMethod.POST, goodEntity, BoxDTO.class);
+        ResponseEntity<BoxDTO> goodResponse = testRestTemplate.exchange(url, HttpMethod.POST, goodEntity, BoxDTO.class);
         assertEquals(HttpStatus.CREATED, goodResponse.getStatusCode());
         assertEquals(goodBoxDTO, goodResponse.getBody());
         assertEquals(goodBoxDTO, mappingBoxService.mapToBoxDTO(boxService.findByCode(goodBoxDTO.getCode())));
@@ -57,14 +59,15 @@ class BoxControllerTest {
     @Test
     void update() {
         Long goodId = 2L;
+        String url = "/boxes/%d";
         BoxDTO updatedBox = new BoxDTO("Box2Test", "t0002");
         HttpEntity<BoxDTO> goodEntity = new HttpEntity<>(updatedBox);
-        ResponseEntity<BoxDTO> goodResponse = testRestTemplate.exchange(String.format("/boxes/%d", goodId), HttpMethod.PUT, goodEntity, BoxDTO.class);
+        ResponseEntity<BoxDTO> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.PUT, goodEntity, BoxDTO.class);
         assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
         assertEquals(updatedBox, goodResponse.getBody());
         Long badId = 20L;
         HttpEntity<BoxDTO> badEntity = new HttpEntity<>(updatedBox);
-        ResponseEntity<BoxDTO> badResponse = testRestTemplate.exchange(String.format("/boxes/%d", badId), HttpMethod.PUT, badEntity, BoxDTO.class);
+        ResponseEntity<BoxDTO> badResponse = testRestTemplate.exchange(String.format(url, badId), HttpMethod.PUT, badEntity, BoxDTO.class);
         assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
     }
 }
