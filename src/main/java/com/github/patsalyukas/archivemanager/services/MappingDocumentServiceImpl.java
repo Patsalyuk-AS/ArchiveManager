@@ -20,7 +20,7 @@ public class MappingDocumentServiceImpl implements MappingDocumentService {
 
     @Override
     public DocumentDTO mapToDocumentDTO(Document document) {
-        DocumentDTO documentDTO = new DocumentDTO(document.getName(), document.getCode(), null);
+        DocumentDTO documentDTO = new DocumentDTO(document.getName(), document.getCode());
         if (document.getBox() != null) {
             documentDTO.setBoxDTO(mappingBoxService.mapToBoxDTO(document.getBox()));
         }
