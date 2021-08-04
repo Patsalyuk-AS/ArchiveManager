@@ -66,8 +66,7 @@ class BoxControllerTest {
         assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
         assertEquals(updatedBox, goodResponse.getBody());
         Long badId = 20L;
-        HttpEntity<BoxDTO> badEntity = new HttpEntity<>(updatedBox);
-        ResponseEntity<BoxDTO> badResponse = testRestTemplate.exchange(String.format(url, badId), HttpMethod.PUT, badEntity, BoxDTO.class);
+        ResponseEntity<BoxDTO> badResponse = testRestTemplate.exchange(String.format(url, badId), HttpMethod.PUT, goodResponse, BoxDTO.class);
         assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
     }
 }

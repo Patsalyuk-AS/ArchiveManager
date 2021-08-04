@@ -61,12 +61,23 @@ class DocumentControllerTest {
 
     @Test
     void update() {
-        //TODO
+        String url = "/documents/%d";
+        Long goodId = 5L;
+        DocumentDTO oldDocumentDTO = mappingDocumentService.mapToDocumentDTO(documentService.getDocumentByID(goodId));
+        DocumentDTO updatedDocumentDTO = new DocumentDTO("DocumentTest", "d00000Test");
+        HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(updatedDocumentDTO);
+        ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
+        assertEquals(updatedDocumentDTO, goodResponse.getBody());
+        assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
+        assertEquals(goodId, documentService.findByCode(updatedDocumentDTO.getCode()).getId());
+        Long badId = 20L;
+        ResponseEntity<DocumentDTO> badResponse = testRestTemplate.exchange(String.format(url, badId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
+        assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
     }
 
     @Test
     void getDocumentsInBox() {
-        //TODO
+
     }
 
     @Test
