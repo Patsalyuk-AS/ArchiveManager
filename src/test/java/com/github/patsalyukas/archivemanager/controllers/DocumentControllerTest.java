@@ -68,8 +68,9 @@ class DocumentControllerTest {
 
     @Test
     void update() {
+        //TODO проверить
         String url = "/documents/%d";
-        Long goodId = 5L;
+        Long goodId = 1L;
         DocumentDTO oldDocumentDTO = mappingDocumentService.mapToDocumentDTO(documentService.getDocumentByID(goodId));
         DocumentDTO updatedDocumentDTO = new DocumentDTO("DocumentTest", "d00000Test");
         HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(updatedDocumentDTO);
@@ -93,6 +94,7 @@ class DocumentControllerTest {
         };
         ResponseEntity<List<DocumentDTO>> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.GET, null, typeRef);
         assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
+        assertNotNull(goodResponse.getBody());
         assertTrue(goodResponse.getBody().contains(documentDTO1));
         assertTrue(goodResponse.getBody().contains(documentDTO2));
         assertFalse(goodResponse.getBody().contains(notContainDocumentDTO));
@@ -101,6 +103,14 @@ class DocumentControllerTest {
     @Test
     void putDocumentInBox() {
         //TODO
+//        String url = "/documents/box/2";
+//        DocumentDTO documentDTO = new DocumentDTO("TestDocument", "t0001");
+//        documentDTO = documentController.create(documentDTO);
+//        HttpEntity<DocumentDTO> entity = new HttpEntity<>(documentDTO);
+//        ResponseEntity<DocumentDTO> response = testRestTemplate.exchange(url, HttpMethod.PUT, entity, DocumentDTO.class);
+//        System.out.println("-----------------------------------------------------");
+//        System.out.println(response.getBody());
+
     }
 
     @Test
