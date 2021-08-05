@@ -1,6 +1,7 @@
 package com.github.patsalyukas.archivemanager.controllers;
 
 import com.github.patsalyukas.archivemanager.dto.DocumentDTO;
+import com.github.patsalyukas.archivemanager.services.BoxService;
 import com.github.patsalyukas.archivemanager.services.DocumentService;
 import com.github.patsalyukas.archivemanager.services.MappingDocumentService;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ class DocumentControllerTest {
 
     @Autowired
     MappingDocumentService mappingDocumentService;
+
+    @Autowired
+    BoxService boxService;
 
     @Test
     void getDocumentByID() {
@@ -101,6 +105,15 @@ class DocumentControllerTest {
 
     @Test
     void extractDocumentFromBox() {
-        //TODO
+        String url = "/documents/%d";
+        Long goodId = 2L;
+        DocumentDTO deletedDocumentDTO = documentController.getDocumentByID(goodId);
+        Long boxId = boxService.findByCode(deletedDocumentDTO.getBoxDTO().getCode()).getId();
+        ResponseEntity<DocumentDTO> goodEntity = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.DELETE, null, DocumentDTO.class);
+        assertEquals(HttpStatus.OK, goodEntity.getStatusCode());
+        List<DocumentDTO> documents = documentController.getDocumentsInBox(boxId);
+        DocumentDTO deletedDocumentDTOFromDB = mappingDocumentService.mapToDocumentDTO(documentService.findByCode(deletedDocumentDTO.getCode()));
+        assertFalse(documents.contains(deletedDocumentDTOFromDB));
     }
+
 }
