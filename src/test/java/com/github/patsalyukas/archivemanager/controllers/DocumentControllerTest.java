@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -77,7 +80,18 @@ class DocumentControllerTest {
 
     @Test
     void getDocumentsInBox() {
-
+        String url = "/documents/box/%d";
+        Long goodId = 2L;
+        DocumentDTO documentDTO1 = new DocumentDTO("Document2", "d000002");
+        DocumentDTO documentDTO2 = new DocumentDTO("Document6", "d000006");
+        DocumentDTO notContainDocumentDTO = new DocumentDTO("Document3", "d000003");
+        ParameterizedTypeReference<List<DocumentDTO>> typeRef = new ParameterizedTypeReference<List<DocumentDTO>>() {
+        };
+        ResponseEntity<List<DocumentDTO>> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.GET, null, typeRef);
+        assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
+        assertTrue(goodResponse.getBody().contains(documentDTO1));
+        assertTrue(goodResponse.getBody().contains(documentDTO2));
+        assertFalse(goodResponse.getBody().contains(notContainDocumentDTO));
     }
 
     @Test
