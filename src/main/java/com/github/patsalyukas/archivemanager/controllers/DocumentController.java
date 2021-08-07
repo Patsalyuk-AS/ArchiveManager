@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,9 +41,6 @@ public class DocumentController {
     @GetMapping("/box/{boxId}")
     public List<DocumentDTO> getDocumentsInBox(@PathVariable Long boxId) {
         List<Document> documents = documentService.getDocumentsInBox(boxId);
-        if (documents == null) {
-            return Collections.emptyList();
-        }
         return documents.stream().map(mappingDocumentService::mapToDocumentDTO).collect(Collectors.toList());
     }
 

@@ -1,36 +1,129 @@
 package com.github.patsalyukas.archivemanager.controllers;
 
+import com.github.patsalyukas.archivemanager.dto.DocumentDTO;
+import com.github.patsalyukas.archivemanager.services.BoxService;
+import com.github.patsalyukas.archivemanager.services.DocumentService;
+import com.github.patsalyukas.archivemanager.services.MappingDocumentService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
+@ExtendWith(SpringExtension.class)
 class DocumentControllerTest {
+
+    @Autowired
+    TestRestTemplate testRestTemplate;
+
+    @Autowired
+    DocumentService documentService;
+
+    @Autowired
+    DocumentController documentController;
+
+    @Autowired
+    MappingDocumentService mappingDocumentService;
+
+    @Autowired
+    BoxService boxService;
 
     @Test
     void getDocumentByID() {
-        //TODO
+        Long goodId = 3L;
+        String url = "/documents/%d";
+        DocumentDTO documentDTO = new DocumentDTO("Document3", "d000003");
+        ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.getForEntity(String.format(url, goodId), DocumentDTO.class);
+        assertEquals(documentDTO, goodResponse.getBody());
+        assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
+        Long badId = 20L;
+        ResponseEntity<DocumentDTO> badResponse = testRestTemplate.getForEntity(String.format(url, badId), DocumentDTO.class);
+        assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
     }
 
     @Test
     void create() {
-        //TODO
+        String url = "/documents/";
+        DocumentDTO goodDocumentDTO = new DocumentDTO("DocumentTest", "d00000Test");
+        HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(goodDocumentDTO);
+        ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.exchange(url, HttpMethod.POST, goodEntity, DocumentDTO.class);
+        DocumentDTO documentDTOFromDB = mappingDocumentService.mapToDocumentDTO(documentService.findByCode(goodDocumentDTO.getCode()));
+        assertEquals(goodDocumentDTO, goodResponse.getBody());
+        assertEquals(goodDocumentDTO, documentDTOFromDB);
+        assertEquals(HttpStatus.CREATED, goodResponse.getStatusCode());
     }
 
     @Test
     void update() {
-        //TODO
+        //TODO проверить
+        String url = "/documents/%d";
+        Long goodId = 1L;
+        DocumentDTO oldDocumentDTO = mappingDocumentService.mapToDocumentDTO(documentService.getDocumentByID(goodId));
+        DocumentDTO updatedDocumentDTO = new DocumentDTO("DocumentTest", "d00000Test");
+        HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(updatedDocumentDTO);
+        ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
+        assertEquals(updatedDocumentDTO, goodResponse.getBody());
+        assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
+        assertEquals(goodId, documentService.findByCode(updatedDocumentDTO.getCode()).getId());
+        Long badId = 20L;
+        ResponseEntity<DocumentDTO> badResponse = testRestTemplate.exchange(String.format(url, badId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
+        assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
     }
 
     @Test
     void getDocumentsInBox() {
-        //TODO
+        String url = "/documents/box/%d";
+        Long goodId = 2L;
+        DocumentDTO documentDTO1 = new DocumentDTO("Document2", "d000002");
+        DocumentDTO documentDTO2 = new DocumentDTO("Document6", "d000006");
+        DocumentDTO notContainDocumentDTO = new DocumentDTO("Document3", "d000003");
+        ParameterizedTypeReference<List<DocumentDTO>> typeRef = new ParameterizedTypeReference<List<DocumentDTO>>() {
+        };
+        ResponseEntity<List<DocumentDTO>> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.GET, null, typeRef);
+        assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
+        assertNotNull(goodResponse.getBody());
+        assertTrue(goodResponse.getBody().contains(documentDTO1));
+        assertTrue(goodResponse.getBody().contains(documentDTO2));
+        assertFalse(goodResponse.getBody().contains(notContainDocumentDTO));
     }
 
     @Test
     void putDocumentInBox() {
         //TODO
+//        String url = "/documents/box/2";
+//        DocumentDTO documentDTO = new DocumentDTO("TestDocument", "t0001");
+//        documentDTO = documentController.create(documentDTO);
+//        HttpEntity<DocumentDTO> entity = new HttpEntity<>(documentDTO);
+//        ResponseEntity<DocumentDTO> response = testRestTemplate.exchange(url, HttpMethod.PUT, entity, DocumentDTO.class);
+//        System.out.println("-----------------------------------------------------");
+//        System.out.println(response.getBody());
+
     }
 
     @Test
     void extractDocumentFromBox() {
-        //TODO
+        String url = "/documents/%d";
+        Long goodId = 2L;
+        DocumentDTO deletedDocumentDTO = documentController.getDocumentByID(goodId);
+        Long boxId = boxService.findByCode(deletedDocumentDTO.getBoxDTO().getCode()).getId();
+        ResponseEntity<DocumentDTO> goodEntity = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.DELETE, null, DocumentDTO.class);
+        assertEquals(HttpStatus.OK, goodEntity.getStatusCode());
+        List<DocumentDTO> documents = documentController.getDocumentsInBox(boxId);
+        DocumentDTO deletedDocumentDTOFromDB = mappingDocumentService.mapToDocumentDTO(documentService.findByCode(deletedDocumentDTO.getCode()));
+        assertFalse(documents.contains(deletedDocumentDTOFromDB));
     }
+
 }

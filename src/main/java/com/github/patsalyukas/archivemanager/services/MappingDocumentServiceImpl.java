@@ -2,11 +2,13 @@ package com.github.patsalyukas.archivemanager.services;
 
 import com.github.patsalyukas.archivemanager.dto.DocumentDTO;
 import com.github.patsalyukas.archivemanager.entities.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MappingDocumentServiceImpl implements MappingDocumentService {
 
+    @Autowired
     MappingBoxService mappingBoxService;
 
     @Override
@@ -20,7 +22,7 @@ public class MappingDocumentServiceImpl implements MappingDocumentService {
 
     @Override
     public DocumentDTO mapToDocumentDTO(Document document) {
-        DocumentDTO documentDTO = new DocumentDTO(document.getName(), document.getCode(), null);
+        DocumentDTO documentDTO = new DocumentDTO(document.getName(), document.getCode());
         if (document.getBox() != null) {
             documentDTO.setBoxDTO(mappingBoxService.mapToBoxDTO(document.getBox()));
         }
