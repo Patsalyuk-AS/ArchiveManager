@@ -27,7 +27,7 @@ public class DocumentServiceImpl implements DocumentService {
         if (documentRepository.existsByCode(document.getCode())) {
             throw new DocumentExist();
         }
-        return documentRepository.save(document);
+        return documentRepository.saveAndFlush(document);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DocumentServiceImpl implements DocumentService {
             throw new DocumentNotFoundException();
         }
         document.setId(id);
-        return documentRepository.save(document);
+        return documentRepository.saveAndFlush(document);
     }
 
     @Override

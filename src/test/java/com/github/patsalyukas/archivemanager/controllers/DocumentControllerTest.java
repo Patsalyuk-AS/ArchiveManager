@@ -14,6 +14,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,11 @@ class DocumentControllerTest {
 
     @Autowired
     BoxService boxService;
+
+    @Autowired
+    JdbcTemplate template;
+
+    private RowMapper<Long> idMapper = (rs, num) -> rs.getLong("id");
 
     @Test
     void getDocumentByID() {
@@ -68,17 +75,16 @@ class DocumentControllerTest {
 
     @Test
     void update() {
-        //TODO проверить
         String url = "/documents/%d";
-        Long goodId = 1L;
-        DocumentDTO oldDocumentDTO = mappingDocumentService.mapToDocumentDTO(documentService.getDocumentByID(goodId));
-        DocumentDTO updatedDocumentDTO = new DocumentDTO("DocumentTest", "d00000Test");
+        List<Long> ids = template.query("SELECT * from documents", idMapper);
+        Long goodId = ids.get(ids.size() / 2);
+        DocumentDTO updatedDocumentDTO = new DocumentDTO("DocumentTest", "d00001Test");
         HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(updatedDocumentDTO);
         ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
         assertEquals(updatedDocumentDTO, goodResponse.getBody());
         assertEquals(HttpStatus.OK, goodResponse.getStatusCode());
         assertEquals(goodId, documentService.findByCode(updatedDocumentDTO.getCode()).getId());
-        Long badId = 20L;
+        Long badId = ids.get(ids.size() - 1) + 1;
         ResponseEntity<DocumentDTO> badResponse = testRestTemplate.exchange(String.format(url, badId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
         assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
     }
@@ -103,11 +109,11 @@ class DocumentControllerTest {
     @Test
     void putDocumentInBox() {
         //TODO
-//        String url = "/documents/box/2";
+//        String url = "/documents/%d";
 //        DocumentDTO documentDTO = new DocumentDTO("TestDocument", "t0001");
-//        documentDTO = documentController.create(documentDTO);
-//        HttpEntity<DocumentDTO> entity = new HttpEntity<>(documentDTO);
-//        ResponseEntity<DocumentDTO> response = testRestTemplate.exchange(url, HttpMethod.PUT, entity, DocumentDTO.class);
+//        DocumentDTO documentDTOFromDB = documentController.create(documentDTO);
+//        HttpEntity<DocumentDTO> entity = new HttpEntity<>(documentDTOFromDB);
+//        ResponseEntity<DocumentDTO> response = testRestTemplate.exchange(String.format(url, 2L), HttpMethod.PUT, entity, DocumentDTO.class);
 //        System.out.println("-----------------------------------------------------");
 //        System.out.println(response.getBody());
 
