@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,20 +22,28 @@ class BoxServiceImplTest {
     @Autowired
     BoxService boxService;
 
+    private final RowMapper<Long> idMapper = ((resultSet, rowNum) -> resultSet.getLong("id"));
+    private final RowMapper<Box> boxMapper = (((resultSet, rowNum) -> new Box(resultSet.getString("name"), resultSet.getString("code"))));
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     @Test
     void getBoxByID() {
-        Box box = boxService.getBoxByID(3L);
-        Box boxTest = new Box("Box3", "b0003");
-        assertEquals(boxTest, box);
+        jdbcTemplate.query("SELECT * FROM BOXES", idMapper).stream().limit(20).forEach(id -> {
+            Box realBox = boxService.getBoxByID(id);
+            Box expectedBox = jdbcTemplate.queryForObject("SELECT * FROM Boxes WHERE id = ?", boxMapper, id);
+            assertEquals(expectedBox, realBox);
+        });
     }
 
     @Test
     void create() {
-        Box box = new Box("Test", "t0001");
+        String code = "t0001";
+        Box box = new Box("Test", code);
         Box createdBox = boxService.create(box);
         assertEquals(box, createdBox);
-        assertNotNull(boxService.findByCode("t0001"));
-        Box existBox = new Box("Test", "t0001");
+        assertNotNull(boxService.findByCode(code));
+        Box existBox = new Box("Test", code);
         assertThrows(BoxExist.class, () -> boxService.create(existBox));
     }
 
