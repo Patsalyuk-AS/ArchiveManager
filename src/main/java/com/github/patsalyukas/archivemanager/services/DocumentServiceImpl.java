@@ -27,7 +27,7 @@ public class DocumentServiceImpl implements DocumentService {
         if (documentRepository.existsByCode(document.getCode())) {
             throw new DocumentExist();
         }
-        return documentRepository.saveAndFlush(document);
+        return documentRepository.save(document);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DocumentServiceImpl implements DocumentService {
             throw new DocumentNotFoundException();
         }
         document.setId(id);
-        return documentRepository.saveAndFlush(document);
+        return documentRepository.save(document);
     }
 
     @Override
@@ -49,15 +49,15 @@ public class DocumentServiceImpl implements DocumentService {
     public Document putDocumentInBox(Long boxId, Document document) {
         Box box = boxService.getBoxByID(boxId);
         Document documentFromDB = findByCode(document.getCode());
-        document.setBox(box);
-        return update(documentFromDB.getId(), document);
+        documentFromDB.setBox(box);
+        return documentRepository.save(documentFromDB);
     }
 
     @Override
     public Document extractDocumentFromBox(Long id) {
         Document documentFromDB = getDocumentByID(id);
         documentFromDB.setBox(null);
-        return update(id, documentFromDB);
+        return documentRepository.save(documentFromDB);
     }
 
     @Override

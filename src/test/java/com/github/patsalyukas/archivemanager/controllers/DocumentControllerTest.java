@@ -1,6 +1,8 @@
 package com.github.patsalyukas.archivemanager.controllers;
 
 import com.github.patsalyukas.archivemanager.dto.DocumentDTO;
+import com.github.patsalyukas.archivemanager.entities.Box;
+import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.services.BoxService;
 import com.github.patsalyukas.archivemanager.services.DocumentService;
 import com.github.patsalyukas.archivemanager.services.MappingDocumentService;
@@ -108,15 +110,17 @@ class DocumentControllerTest {
 
     @Test
     void putDocumentInBox() {
-        //TODO
-//        String url = "/documents/%d";
-//        DocumentDTO documentDTO = new DocumentDTO("TestDocument", "t0001");
-//        DocumentDTO documentDTOFromDB = documentController.create(documentDTO);
-//        HttpEntity<DocumentDTO> entity = new HttpEntity<>(documentDTOFromDB);
-//        ResponseEntity<DocumentDTO> response = testRestTemplate.exchange(String.format(url, 2L), HttpMethod.PUT, entity, DocumentDTO.class);
-//        System.out.println("-----------------------------------------------------");
-//        System.out.println(response.getBody());
-
+        String url = "/documents/box/%d";
+        String code = "EmptyBox1";
+        Long boxId = 2L;
+        Box box = boxService.getBoxByID(boxId);
+        Document document = documentService.findByCode(code);
+        assertNull(document.getBox());
+        DocumentDTO documentDTO = mappingDocumentService.mapToDocumentDTO(document);
+        HttpEntity<DocumentDTO> goodEntity = new HttpEntity<>(documentDTO);
+        ResponseEntity<DocumentDTO> goodResponse = testRestTemplate.exchange(String.format(url, boxId), HttpMethod.PUT, goodEntity, DocumentDTO.class);
+        assertNotNull(goodResponse.getBody().getBoxDTO());
+        assertEquals(box.getCode(), goodResponse.getBody().getBoxDTO().getCode());
     }
 
     @Test

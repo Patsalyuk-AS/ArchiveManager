@@ -30,7 +30,6 @@ public class Document {
 
     @OneToOne
     @JoinColumn(name = "BOX")
-    @ToString.Exclude
     private Box box;
 
 }
