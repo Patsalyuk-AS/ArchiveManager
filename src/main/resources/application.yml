@@ -1,7 +1,7 @@
 #http://localhost:8080/h2-console/
-#logging:
-# level:
-#  sql: debug
+logging:
+  level:
+    sql: debug
 spring:
   datasource:
     driverClassName: org.h2.Driver
@@ -12,11 +12,10 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     generate-ddl: false
-      # properties:
-    #hibernate:
-    #  format_sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
-      #ddl-auto: none
       ddl-auto: update
   h2:
     console:
