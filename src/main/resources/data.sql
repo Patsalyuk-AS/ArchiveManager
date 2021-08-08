@@ -14,3 +14,13 @@ INSERT INTO Documents (NAME, CODE, BOX) VALUES
   ('Document7', 'd000007', 1),
   ('Document8', 'd000008', 4);
 
+INSERT INTO Documents (NAME, CODE) VALUES
+  ('Document9', 'EmptyBox1'),
+  ('Document10', 'EmptyBox2');
+
+
+
+
+
+
+
