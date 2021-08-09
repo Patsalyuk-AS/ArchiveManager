@@ -20,8 +20,8 @@ public class DocumentController {
     MappingDocumentService mappingDocumentService;
 
     @GetMapping("/{id}")
-    public DocumentDTO getDocumentByID(@PathVariable Long id) {
-        Document document = documentService.getDocumentByID(id);
+    public DocumentDTO findDocumentByID(@PathVariable Long id) {
+        Document document = documentService.findDocumentByID(id);
         return mappingDocumentService.mapToDocumentDTO(document);
     }
 

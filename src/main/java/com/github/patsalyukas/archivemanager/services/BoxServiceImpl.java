@@ -14,7 +14,7 @@ public class BoxServiceImpl implements BoxService {
     private BoxRepository boxRepository;
 
     @Override
-    public Box getBoxByID(Long id) {
+    public Box findBoxByID(Long id) {
         return boxRepository.findById(id).orElseThrow(BoxNotFoundException::new);
     }
 

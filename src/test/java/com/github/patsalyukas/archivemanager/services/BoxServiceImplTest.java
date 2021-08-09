@@ -4,19 +4,16 @@ import com.github.patsalyukas.archivemanager.entities.Box;
 import com.github.patsalyukas.archivemanager.exceptions.BoxExist;
 import com.github.patsalyukas.archivemanager.exceptions.BoxNotFoundException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@ExtendWith(SpringExtension.class)
 class BoxServiceImplTest {
 
     @Autowired
@@ -30,7 +27,7 @@ class BoxServiceImplTest {
     @Test
     void getBoxByID() {
         jdbcTemplate.query("SELECT * FROM BOXES", idMapper).stream().limit(20).forEach(id -> {
-            Box realBox = boxService.getBoxByID(id);
+            Box realBox = boxService.findBoxByID(id);
             Box expectedBox = jdbcTemplate.queryForObject("SELECT * FROM Boxes WHERE id = ?", boxMapper, id);
             assertEquals(expectedBox, realBox);
         });
@@ -50,10 +47,10 @@ class BoxServiceImplTest {
     @Test
     void update() {
         Box box = new Box("Box3", "t0003");
-        assertEquals("b0003", boxService.getBoxByID(3L).getCode());
+        assertEquals("b0003", boxService.findBoxByID(3L).getCode());
         boxService.update(3L, box);
         assertNotNull(boxService.findByCode("t0003"));
-        assertEquals("t0003", boxService.getBoxByID(3L).getCode());
+        assertEquals("t0003", boxService.findBoxByID(3L).getCode());
         Box notExistBox = new Box("Box3", "t0001");
         assertThrows(BoxNotFoundException.class, () -> boxService.update(20L, notExistBox));
     }

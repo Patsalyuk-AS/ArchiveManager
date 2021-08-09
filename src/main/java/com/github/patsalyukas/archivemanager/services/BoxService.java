@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BoxService {
 
-    Box getBoxByID(Long id);
+    Box findBoxByID(Long id);
 
     Box create(Box box);
 
