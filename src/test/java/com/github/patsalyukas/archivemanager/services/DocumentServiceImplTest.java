@@ -5,10 +5,8 @@ import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentExist;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@ExtendWith(SpringExtension.class)
 class DocumentServiceImplTest {
 
     @Autowired
@@ -29,7 +26,7 @@ class DocumentServiceImplTest {
 
     @Test
     void getDocumentByID() {
-        Document document = documentService.getDocumentByID(2L);
+        Document document = documentService.findDocumentByID(2L);
         Document documentTest = new Document("Document2", "d000002");
         assertEquals(documentTest, document);
     }
@@ -46,10 +43,10 @@ class DocumentServiceImplTest {
     @Test
     void update() {
         Document document = new Document("DocumentTest3", "t000003");
-        assertEquals("d000003", documentService.getDocumentByID(3L).getCode());
+        assertEquals("d000003", documentService.findDocumentByID(3L).getCode());
         documentService.update(3L, document);
         assertNotNull(documentService.findByCode("t000003"));
-        assertEquals("t000003", documentService.getDocumentByID(3L).getCode());
+        assertEquals("t000003", documentService.findDocumentByID(3L).getCode());
         Document notExistDocument = new Document("Test", "t000001");
         assertThrows(DocumentNotFoundException.class, () -> documentService.update(20L, notExistDocument));
     }
@@ -75,7 +72,7 @@ class DocumentServiceImplTest {
 
     @Test
     void extractDocumentFromBox() {
-        Document document = documentService.getDocumentByID(2L);
+        Document document = documentService.findDocumentByID(2L);
         Box box = document.getBox();
         List<Document> documents = documentService.getDocumentsInBox(box.getId());
         assertTrue(documents.contains(document));

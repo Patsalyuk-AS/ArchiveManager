@@ -113,7 +113,7 @@ class DocumentControllerTest {
         String url = "/documents/box/%d";
         String code = "EmptyBox1";
         Long boxId = 2L;
-        Box box = boxService.getBoxByID(boxId);
+        Box box = boxService.findBoxByID(boxId);
         Document document = documentService.findByCode(code);
         assertNull(document.getBox());
         DocumentDTO documentDTO = mappingDocumentService.mapToDocumentDTO(document);
@@ -127,7 +127,7 @@ class DocumentControllerTest {
     void extractDocumentFromBox() {
         String url = "/documents/%d";
         Long goodId = 2L;
-        DocumentDTO deletedDocumentDTO = documentController.getDocumentByID(goodId);
+        DocumentDTO deletedDocumentDTO = documentController.findDocumentByID(goodId);
         Long boxId = boxService.findByCode(deletedDocumentDTO.getBoxDTO().getCode()).getId();
         ResponseEntity<DocumentDTO> goodEntity = testRestTemplate.exchange(String.format(url, goodId), HttpMethod.DELETE, null, DocumentDTO.class);
         assertEquals(HttpStatus.OK, goodEntity.getStatusCode());
