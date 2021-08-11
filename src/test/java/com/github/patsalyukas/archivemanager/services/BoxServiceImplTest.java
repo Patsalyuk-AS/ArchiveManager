@@ -1,6 +1,7 @@
 package com.github.patsalyukas.archivemanager.services;
 
 import com.github.patsalyukas.archivemanager.entities.Box;
+import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.BoxExist;
 import com.github.patsalyukas.archivemanager.exceptions.BoxNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -18,6 +23,8 @@ class BoxServiceImplTest {
 
     @Autowired
     BoxService boxService;
+
+    private final RowMapper<Document> documentMapper = (((resultSet, rowNum) -> new Document(resultSet.getString("name"), resultSet.getString("code"))));
 
     private final RowMapper<Long> idMapper = ((resultSet, rowNum) -> resultSet.getLong("id"));
     private final RowMapper<Box> boxMapper = (((resultSet, rowNum) -> new Box(resultSet.getString("name"), resultSet.getString("code"))));
@@ -59,5 +66,16 @@ class BoxServiceImplTest {
     void findByCode() {
         Box box = new Box("Box4", "b0004");
         assertEquals(box, boxService.findByCode("b0004"));
+    }
+
+    @Test
+    void getDocumentsInBox() {
+        Random random = new Random();
+        List<Long> ids = jdbcTemplate.query("SELECT * FROM BOXES", idMapper);
+        Long id = ids.get(random.nextInt(ids.size()));
+        List<Document> expectedDocuments = jdbcTemplate.query("SELECT * FROM DOCUMENTS WHERE BOX = ?", documentMapper, id);
+        Set<Document> documents = boxService.getDocumentsInBox(id);
+        assertEquals(expectedDocuments.size(), documents.size());
+        expectedDocuments.forEach(document -> assertTrue(documents.contains(document)));
     }
 }

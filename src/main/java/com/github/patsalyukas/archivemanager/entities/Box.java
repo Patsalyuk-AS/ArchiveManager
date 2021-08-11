@@ -3,6 +3,7 @@ package com.github.patsalyukas.archivemanager.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Boxes")
@@ -10,14 +11,13 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString
-@EqualsAndHashCode(exclude = {"id"})
+@ToString(exclude = {"id", "documents"})
+@EqualsAndHashCode(exclude = {"id", "documents"})
 public class Box {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
-    @ToString.Exclude
     private long id;
 
     @NonNull
@@ -27,5 +27,12 @@ public class Box {
     @NonNull
     @Column(name = "CODE", nullable = false, unique = true)
     private String code;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "box")
+    private Set<Document> documents;
+
+    public void addDocument(Document document) {
+        documents.add(document);
+    }
 
 }

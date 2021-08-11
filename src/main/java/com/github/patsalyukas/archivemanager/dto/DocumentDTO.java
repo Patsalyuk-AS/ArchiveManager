@@ -10,9 +10,9 @@ import lombok.*;
 public class DocumentDTO {
 
     @NonNull
-    private String name;
+    private java.lang.String name;
     @NonNull
-    private String code;
+    private java.lang.String code;
     private BoxDTO boxDTO;
 
 }

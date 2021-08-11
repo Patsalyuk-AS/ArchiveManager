@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "Documents")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"id", "box"})
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(exclude = {"id", "box"})
@@ -17,7 +17,6 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
-    @ToString.Exclude
     private long id;
 
     @NonNull
@@ -28,8 +27,9 @@ public class Document {
     @Column(name = "CODE", nullable = false, unique = true)
     private String code;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOX")
     private Box box;
 
 }
+
