@@ -1,11 +1,14 @@
 package com.github.patsalyukas.archivemanager.services;
 
 import com.github.patsalyukas.archivemanager.entities.Box;
+import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.BoxExist;
 import com.github.patsalyukas.archivemanager.exceptions.BoxNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.BoxRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -38,5 +41,11 @@ public class BoxServiceImpl implements BoxService {
     @Override
     public Box findByCode(String code) {
         return boxRepository.findByCode(code).orElseThrow(BoxNotFoundException::new);
+    }
+
+    @Override
+    public Set<Document> getDocumentsInBox(Long boxId) {
+        Box box = boxRepository.findById(boxId).orElseThrow(BoxNotFoundException::new);
+        return box.getDocuments();
     }
 }

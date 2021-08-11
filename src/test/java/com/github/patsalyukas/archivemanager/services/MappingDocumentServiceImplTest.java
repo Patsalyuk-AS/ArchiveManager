@@ -24,7 +24,6 @@ class MappingDocumentServiceImplTest {
         Box box = new Box("box1", "b00001");
         BoxDTO boxDTO = new BoxDTO("box1", "b00001");
         document.setBox(box);
-        documentDTO.setBoxDTO(boxDTO);
         assertEquals(document, mappingDocumentService.mapToDocumentEntity(documentDTO));
     }
 
