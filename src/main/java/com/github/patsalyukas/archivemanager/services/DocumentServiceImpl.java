@@ -18,7 +18,7 @@ public class DocumentServiceImpl implements DocumentService {
     BoxService boxService;
 
     @Override
-    public Document findDocumentByID(Long id) {
+    public Document findDocumentById(Long id) {
         return documentRepository.findById(id).orElseThrow(DocumentNotFoundException::new);
     }
 
@@ -41,13 +41,13 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public List<Document> getDocumentsInBox(Long boxId) {
-        Box box = boxService.findBoxByID(boxId);
+        Box box = boxService.findBoxById(boxId);
         return documentRepository.findByBox(box).orElseThrow(DocumentNotFoundException::new);
     }
 
     @Override
     public Document putDocumentInBox(Long boxId, Document document) {
-        Box box = boxService.findBoxByID(boxId);
+        Box box = boxService.findBoxById(boxId);
         Document documentFromDB = findByCode(document.getCode());
         documentFromDB.setBox(box);
         return documentRepository.save(documentFromDB);
@@ -55,7 +55,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document extractDocumentFromBox(Long id) {
-        Document documentFromDB = findDocumentByID(id);
+        Document documentFromDB = findDocumentById(id);
         documentFromDB.setBox(null);
         return documentRepository.save(documentFromDB);
     }

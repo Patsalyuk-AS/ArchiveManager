@@ -24,7 +24,7 @@ public class BoxController {
 
     @GetMapping("/{id}")
     public BoxDTO findBoxById(@PathVariable Long id) {
-        Box box = boxService.findBoxByID(id);
+        Box box = boxService.findBoxById(id);
         return (mappingBoxService.mapToBoxDTO(box));
     }
 
