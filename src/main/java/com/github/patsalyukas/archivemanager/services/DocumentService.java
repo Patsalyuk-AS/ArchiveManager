@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DocumentService {
 
-    Document findDocumentByID(Long id);
+    Document findDocumentById(Long id);
 
     Document create(Document document);
 

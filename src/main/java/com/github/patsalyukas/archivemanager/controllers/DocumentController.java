@@ -21,7 +21,7 @@ public class DocumentController {
 
     @GetMapping("/{id}")
     public DocumentDTO findDocumentByID(@PathVariable Long id) {
-        Document document = documentService.findDocumentByID(id);
+        Document document = documentService.findDocumentById(id);
         return mappingDocumentService.mapToDocumentDTO(document);
     }
 

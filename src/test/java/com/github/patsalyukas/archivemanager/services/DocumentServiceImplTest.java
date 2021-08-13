@@ -7,9 +7,12 @@ import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundExceptio
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,12 +26,19 @@ class DocumentServiceImplTest {
     @Autowired
     BoxService boxService;
 
+    private final RowMapper<Long> idMapper = ((resultSet, rowNum) -> resultSet.getLong("id"));
+    private final RowMapper<Box> boxMapper = (((resultSet, rowNum) -> new Box(resultSet.getString("name"), resultSet.getString("code"))));
+    private final RowMapper<Document> documentMapper = (((resultSet, rowNum) -> new Document(resultSet.getString("name"), resultSet.getString("code"))));
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @Test
     void getDocumentByID() {
-        Document document = documentService.findDocumentByID(2L);
-        Document documentTest = new Document("Document2", "d000002");
-        assertEquals(documentTest, document);
+        jdbcTemplate.query("SELECT * FROM DOCUMENTS", idMapper).stream().limit(20).forEach(id -> {
+            Document realDocument = documentService.findDocumentById(id);
+            Document expectedDocument = jdbcTemplate.queryForObject("SELECT * FROM DOCUMENTS WHERE id = ?", documentMapper, id);
+            assertEquals(expectedDocument, realDocument);
+        });
     }
 
     @Test
@@ -42,41 +52,50 @@ class DocumentServiceImplTest {
 
     @Test
     void update() {
+        Random random = new Random();
+        List<Long> ids = jdbcTemplate.query("SELECT * FROM DOCUMENTS", idMapper);
+        Long id = ids.get(random.nextInt(ids.size()));
         Document document = new Document("DocumentTest3", "t000003");
-        assertEquals("d000003", documentService.findDocumentByID(3L).getCode());
-        documentService.update(3L, document);
+        Document documentFromDB = jdbcTemplate.queryForObject("SELECT * FROM DOCUMENTS WHERE id = ?", documentMapper, id);
+        assertEquals(documentFromDB, documentService.findDocumentById(id));
+        documentService.update(id, document);
         assertNotNull(documentService.findByCode("t000003"));
-        assertEquals("t000003", documentService.findDocumentByID(3L).getCode());
+        assertEquals("t000003", documentService.findDocumentById(id).getCode());
         Document notExistDocument = new Document("Test", "t000001");
-        assertThrows(DocumentNotFoundException.class, () -> documentService.update(20L, notExistDocument));
+        Long notExistId = ids.get(ids.size() - 1) + 20;
+        assertThrows(DocumentNotFoundException.class, () -> documentService.update(notExistId, notExistDocument));
     }
 
     @Test
     void getDocumentsInBox() {
-        List<Document> documents = documentService.getDocumentsInBox(1L);
-        assertTrue(documents.contains(new Document("Document1", "d000001")));
-        assertTrue(documents.contains(new Document("Document5", "d000005")));
-        assertTrue(documents.contains(new Document("Document7", "d000007")));
-        assertFalse(documents.contains(new Document("Document2", "d000002")));
+        Random random = new Random();
+        List<Long> ids = jdbcTemplate.query("SELECT * FROM BOXES", idMapper);
+        Long id = ids.get(random.nextInt(ids.size()));
+        List<Document> expectedDocuments = jdbcTemplate.query("SELECT * FROM DOCUMENTS WHERE BOX = ?", documentMapper, id);
+        List<Document> documents = documentService.getDocumentsInBox(id);
+        assertEquals(expectedDocuments.size(), documents.size());
+        expectedDocuments.forEach(document -> assertTrue(documents.contains(document)));
     }
 
     @Test
     void putDocumentInBox() {
+        List<Long> ids = jdbcTemplate.query("SELECT * FROM BOXES", idMapper);
         Document document = new Document("Test", "t000001");
         documentService.create(document);
         assertNull(documentService.findByCode("t000001").getBox());
-        documentService.putDocumentInBox(1L, document);
-        List<Document> documents = documentService.getDocumentsInBox(1L);
+        documentService.putDocumentInBox(ids.get(0), document);
+        List<Document> documents = documentService.getDocumentsInBox(ids.get(0));
         assertTrue(documents.contains(document));
     }
 
     @Test
     void extractDocumentFromBox() {
-        Document document = documentService.findDocumentByID(2L);
+        Long id = getId();
+        Document document = documentService.findDocumentById(id);
         Box box = document.getBox();
         List<Document> documents = documentService.getDocumentsInBox(box.getId());
         assertTrue(documents.contains(document));
-        documentService.extractDocumentFromBox(2L);
+        documentService.extractDocumentFromBox(id);
         documents = documentService.getDocumentsInBox(box.getId());
         assertFalse(documents.contains(document));
     }
@@ -85,5 +104,11 @@ class DocumentServiceImplTest {
     void findByCode() {
         Document document = new Document("Document6", "d000006");
         assertEquals(document, documentService.findByCode("d000006"));
+    }
+
+    private Long getId() {
+        Random random = new Random();
+        List<Long> ids = jdbcTemplate.query("SELECT * FROM DOCUMENTS", idMapper);
+        return ids.get(random.nextInt(ids.size()));
     }
 }

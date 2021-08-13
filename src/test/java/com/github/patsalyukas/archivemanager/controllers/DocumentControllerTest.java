@@ -113,7 +113,7 @@ class DocumentControllerTest {
         String url = "/documents/box/%d";
         String code = "EmptyBox1";
         Long boxId = 2L;
-        Box box = boxService.findBoxByID(boxId);
+        Box box = boxService.findBoxById(boxId);
         Document document = documentService.findByCode(code);
         assertNull(document.getBox());
         DocumentDTO documentDTO = mappingDocumentService.mapToDocumentDTO(document);

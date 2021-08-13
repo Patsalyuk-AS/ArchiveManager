@@ -9,7 +9,7 @@ import java.util.Set;
 @Service
 public interface BoxService {
 
-    Box findBoxByID(Long id);
+    Box findBoxById(Long id);
 
     Box create(Box box);
 
