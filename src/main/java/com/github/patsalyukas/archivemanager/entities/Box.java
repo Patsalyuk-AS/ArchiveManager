@@ -11,13 +11,15 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"id", "documents"})
-@EqualsAndHashCode(exclude = {"id", "documents"})
+@ToString
+@EqualsAndHashCode
 public class Box {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private long id;
 
     @NonNull
@@ -29,6 +31,8 @@ public class Box {
     private String code;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "box")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Document> documents;
 
     public void addDocument(Document document) {

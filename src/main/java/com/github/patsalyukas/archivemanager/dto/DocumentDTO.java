@@ -1,5 +1,6 @@
 package com.github.patsalyukas.archivemanager.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Data
@@ -10,9 +11,14 @@ import lombok.*;
 public class DocumentDTO {
 
     @NonNull
-    private java.lang.String name;
+    @Schema(description = "Name of the document")
+    private String name;
+
     @NonNull
-    private java.lang.String code;
+    @Schema(description = "Code of the document")
+    private String code;
+
+    @Schema(description = "Box with document")
     private BoxDTO boxDTO;
 
 }
