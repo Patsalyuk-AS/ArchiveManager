@@ -6,7 +6,7 @@
 
     <groupId>com.github.aspatsalyuk</groupId>
     <artifactId>archive-manager</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -105,23 +105,17 @@
                 <version>3.0.0-M5</version>
             </plugin>
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.13</version>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.2.1</version>
                 <configuration>
-                    <repository>pazas/${project.artifactId}</repository>
-                    <tag>${project.version}</tag>
+                    <from>
+                        <image>openjdk:17-alpine</image>
+                    </from>
+                    <to>
+                        <image>pazas/${project.artifactId}:${project.version}</image>
+                    </to>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
