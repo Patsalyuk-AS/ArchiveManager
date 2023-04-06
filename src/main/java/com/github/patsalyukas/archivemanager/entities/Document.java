@@ -1,15 +1,14 @@
 package com.github.patsalyukas.archivemanager.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "Documents")
 @Getter
 @Setter
 @ToString(exclude = {"id", "box"})
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @EqualsAndHashCode(exclude = {"id", "box"})
 public class Document {

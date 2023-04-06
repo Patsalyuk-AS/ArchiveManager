@@ -1,15 +1,15 @@
 package com.github.patsalyukas.archivemanager.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "Boxes")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
