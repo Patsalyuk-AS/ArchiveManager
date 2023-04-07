@@ -1,8 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: db-config
+  name: db-am-config
 data:
-  POSTGRESQL_URL: jdbc:postgresql://db.sbercode-daa5fdcc-1e12-40ad-9d86-2145267f434c-work.svc.cluster.local:5432
+  POSTGRESQL_URL: jdbc:postgresql://db-am.sbercode-b9773d51-c0f3-4843-a79c-1f26a46d2393-work.svc.cluster.local:30242
   POSTGRESQL_USERNAME: archive
   POSTGRESQL_DATABASE: archive_db

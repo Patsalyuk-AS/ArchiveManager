@@ -16,18 +16,18 @@ spec:
     spec:
       containers:
         - name: archive-manager-cont
-          image: pazas/archive-manager:1.0.3
+          image: pazas/archive-manager:1.0.4
           ports:
-            - name: app-port
+            - name: app-am-port
               containerPort: 30241
           volumeMounts:
             - name: archive-manager-config-volume
               mountPath: /app/config/
           envFrom:
             - configMapRef:
-                name: db-config
+                name: db-am-config
             - secretRef:
-                name: db-secret
+                name: db-am-secret
       volumes:
         - name: archive-manager-config-volume
           configMap:

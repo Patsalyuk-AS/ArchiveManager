@@ -9,4 +9,4 @@ spec:
     - name: am-svc-port
       protocol: TCP
       port: 30241
-      targetPort: am-port
+      targetPort: app-am-port

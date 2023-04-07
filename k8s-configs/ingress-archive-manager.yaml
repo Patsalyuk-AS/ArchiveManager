@@ -6,7 +6,7 @@ metadata:
     app: archive-manager-ingress
 spec:
   rules:
-    - host: sbercode-b275cae5-3a4b-41e9-9c0f-d1ae795d5076-work.apps.sbc-okd.pcbltools.ru
+    - host: sbercode-b9773d51-c0f3-4843-a79c-1f26a46d2393-work.apps.sbc-okd.pcbltools.ru
       http:
         paths:
           - path: /api/v1/archive-manager
