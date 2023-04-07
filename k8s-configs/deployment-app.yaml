@@ -1,0 +1,34 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: archive-manager
+  labels:
+    app: archive-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: archive-manager
+  template:
+    metadata:
+      labels:
+        app: archive-manager
+    spec:
+      containers:
+        - name: archive-manager-cont
+          image: pazas/archive-manager:1.0.3
+          ports:
+            - name: app-port
+              containerPort: 30241
+          volumeMounts:
+            - name: archive-manager-config-volume
+              mountPath: /app/config/
+          envFrom:
+            - configMapRef:
+                name: db-config
+            - secretRef:
+                name: db-secret
+      volumes:
+        - name: archive-manager-config-volume
+          configMap:
+            name: archive-manager-config

@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: archive-manager-service
+spec:
+  selector:
+    app: archive-manager
+  ports:
+    - name: am-svc-port
+      protocol: TCP
+      port: 30241
+      targetPort: am-port
