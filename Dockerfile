@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM openjdk:17-jdk
 MAINTAINER pazalyk@gmail.com
 WORKDIR /app
 ADD /target/*.jar app.jar
