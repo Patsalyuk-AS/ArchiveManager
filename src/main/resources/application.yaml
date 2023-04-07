@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgres://db.sbercode-b275cae5-3a4b-41e9-9c0f-d1ae795d5076-work.svc.cluster.local:5432/${POSTGRESQL_DATABASE}
+    url: ${POSTGRESQL_URL}/${POSTGRESQL_DATABASE}
     username: ${POSTGRESQL_USERNAME}
     password: ${POSTGRESQL_PASSWORD}
   jpa:
