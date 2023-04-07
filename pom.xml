@@ -6,7 +6,7 @@
 
     <groupId>com.github.aspatsalyuk</groupId>
     <artifactId>archive-manager</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -104,9 +104,15 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
+                    <from>
+                        <image>openjdk:17-jdk</image>
+                    </from>
                     <to>
                         <image>pazas/${project.artifactId}:${project.version}</image>
                     </to>
+                    <container>
+                        <mainClass>com.github.patsalyukas.archivemanager.Main</mainClass>
+                    </container>
                 </configuration>
             </plugin>
         </plugins>

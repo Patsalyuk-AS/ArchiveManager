@@ -4,9 +4,9 @@ metadata:
   name: db
 spec:
   selector:
-    app: db-selector  
+    app: db-selector
   ports:
-    - name: postgres
+    - name: am-postgres
       protocol: TCP
-      port: 5432
-      targetPort: tcp-postgres
+      port: 30242
+      targetPort: am-tcp-postgres

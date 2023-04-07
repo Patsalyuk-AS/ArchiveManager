@@ -18,7 +18,7 @@ spec:
         - name: postgres-containers
           image: bitnami/postgresql:15
           ports:
-            - name: tcp-postgres
+            - name: am-tcp-postgres
               containerPort: 5432
           volumeMounts:
             - name: db-init-volume
