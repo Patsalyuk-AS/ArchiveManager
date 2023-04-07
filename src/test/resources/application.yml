@@ -1,0 +1,31 @@
+#http://localhost:8080/h2-console/
+server:
+  port: 30241
+  servlet:
+    context-path: /api/v1/archive-manager
+logging:
+  level:
+    sql: debug
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    url: jdbc:h2:mem:///ArchiveManagerDB
+    initialization-mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: false
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
