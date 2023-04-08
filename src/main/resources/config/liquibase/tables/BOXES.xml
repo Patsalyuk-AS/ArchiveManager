@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20230408-create-sq_boxes" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="SQ_BOXES"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="SQ_BOXES" cacheSize="20" minValue="1" maxValue="9999999999999999" incrementBy="1" ordered="true"/>
+    </changeSet>
+
+    <changeSet id="20230408-create-table-boxes" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BOXES"/>
+            </not>
+        </preConditions>
+        <createTable tableName="BOXES">
+            <column name="ID" type="bigint" defaultValueComputed="nextval('SQ_BOXES')" remarks="Идентификатор таблицы BOXES">
+                <constraints primaryKey="true" primaryKeyName="PK_BOXES" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(50)" remarks="Название ящика">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="CODE" type="varchar(20)" remarks="Код ящика">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="patsalyuk-as" id="20230408-alter-sq_boxes" labels="task-1">
+        <sql>ALTER SEQUENCE SQ_BOXES OWNED BY BOXES.ID;</sql>
+    </changeSet>
+
+</databaseChangeLog>
