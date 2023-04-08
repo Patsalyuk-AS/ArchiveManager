@@ -20,6 +20,25 @@ spec:
           ports:
             - name: app-am-port
               containerPort: 30241
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /api/v1/archive-manager/actuator/health
+              port: app-am-port
+            initialDelaySeconds: 100
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /api/v1/archive-manager/actuator/health
+              port: app-am-port
+            initialDelaySeconds: 100
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
           volumeMounts:
             - name: archive-manager-config-volume
               mountPath: /app/config/

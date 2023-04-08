@@ -20,6 +20,13 @@ spec:
           ports:
             - name: am-postgr-port
               containerPort: 5432
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
           volumeMounts:
             - name: db-am-init-volume
               mountPath: /docker-entrypoint-initdb.d/

@@ -1,1 +1,4 @@
-sbercode-b9773d51-c0f3-4843-a79c-1f26a46d2393-work.apps.sbc-okd.pcbltools.ru/api/v1/archive-manager/actuator
+sbercode-341b5a5b-883d-4cec-8bba-133f79800689-work.apps.sbc-okd.pcbltools.ru/api/v1/archive-manager/actuator
+sbercode-341b5a5b-883d-4cec-8bba-133f79800689-work.apps.sbc-okd.pcbltools.ru/api/v1/archive-manager/documents/1
+http://archive-manager.apps.okd.sbc-openshift.ru/api/v1/archive-manager/actuator
+http://archive-manager.apps.okd.sbc-openshift.ru/api/v1/archive-manager/documents/1
