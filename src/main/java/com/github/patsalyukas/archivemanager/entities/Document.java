@@ -27,7 +27,7 @@ public class Document {
     private String code;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "BOX")
+    @JoinColumn(name = "BOX_ID")
     private Box box;
 
 }
