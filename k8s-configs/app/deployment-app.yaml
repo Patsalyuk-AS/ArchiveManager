@@ -25,13 +25,13 @@ spec:
             httpGet:
               path: /api/v1/archive-manager/actuator/health
               port: app-am-port
-            initialDelaySeconds: 100
+            initialDelaySeconds: 60
           livenessProbe:
             failureThreshold: 10
             httpGet:
               path: /api/v1/archive-manager/actuator/health
               port: app-am-port
-            initialDelaySeconds: 100
+            initialDelaySeconds: 60
           resources:
             limits:
               cpu: "500m"
