@@ -16,18 +16,37 @@ spec:
     spec:
       containers:
         - name: archive-manager-cont
-          image: pazas/archive-manager:1.0.3
+          image: pazas/archive-manager:1.0.4
           ports:
-            - name: app-port
+            - name: app-am-port
               containerPort: 30241
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /api/v1/archive-manager/actuator/health
+              port: app-am-port
+            initialDelaySeconds: 100
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /api/v1/archive-manager/actuator/health
+              port: app-am-port
+            initialDelaySeconds: 100
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
           volumeMounts:
             - name: archive-manager-config-volume
               mountPath: /app/config/
           envFrom:
             - configMapRef:
-                name: db-config
+                name: db-am-config
             - secretRef:
-                name: db-secret
+                name: db-am-secret
       volumes:
         - name: archive-manager-config-volume
           configMap:

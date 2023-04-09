@@ -10,6 +10,8 @@ spring:
     password: ${POSTGRESQL_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
 management:
   endpoints:
     web:

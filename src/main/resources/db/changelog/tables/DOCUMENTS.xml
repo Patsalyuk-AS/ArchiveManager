@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20230408-create-sq_documents" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="SQ_DOCUMENTS"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="SQ_DOCUMENTS" cacheSize="20" minValue="1" maxValue="9999999999999999" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="20230408-create-table-documents" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="DOCUMENTS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="DOCUMENTS">
+            <column name="ID" type="bigint" defaultValueComputed="nextval('SQ_DOCUMENTS')" remarks="Идентификатор таблицы DOCUMENTS">
+                <constraints primaryKey="true" primaryKeyName="PK_DOCUMENTS" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(50)" remarks="Название документа">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="CODE" type="varchar(20)" remarks="Код документа">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="BOX_ID" type="bigint">
+                <constraints foreignKeyName="FK_DOCUMENTS_BOXES_ID" references="BOXES(ID)" nullable="true"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet author="patsalyuk-as" id="20230408-alter-sq_documents" labels="task-1">
+        <sql>ALTER SEQUENCE SQ_DOCUMENTS OWNED BY DOCUMENTS.ID;</sql>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000001" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000001'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document1"></column>
+            <column name="CODE" value="d000001"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0001')"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000002" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000002'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document2"></column>
+            <column name="CODE" value="d000002"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0002')"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000003" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000003'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document3"></column>
+            <column name="CODE" value="d000003"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0003')"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000004" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000004'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document4"></column>
+            <column name="CODE" value="d000004"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0004')"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000005" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000005'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document5"></column>
+            <column name="CODE" value="d000005"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0005')"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000006" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000006'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document6"></column>
+            <column name="CODE" value="d000006"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0002')"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20230408-insert-documents-d000007" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from documents d where d.code='d000007'</sqlCheck>
+        </preConditions>
+        <insert tableName="DOCUMENTS">
+            <column name="NAME" value="Document7"></column>
+            <column name="CODE" value="d000007"></column>
+            <column name="BOX_ID" valueComputed="(select id from boxes where code = 'b0003')"></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

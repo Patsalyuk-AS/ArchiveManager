@@ -1,12 +1,12 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: db
+  name: db-am
 spec:
   selector:
-    app: db-selector
+    app: db-am-selector
   ports:
     - name: am-postgres
       protocol: TCP
       port: 30242
-      targetPort: am-tcp-postgres
+      targetPort: am-postgr-port
