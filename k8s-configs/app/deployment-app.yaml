@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: archive-manager-cont
-          image: pazas/archive-manager:1.0.4
+          image: pazas/archive-manager:1.0.5
           ports:
             - name: app-am-port
               containerPort: 30241
