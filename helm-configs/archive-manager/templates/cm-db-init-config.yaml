@@ -1,0 +1,21 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.name.cm.dbInitConfig }}
+data:
+  init-db.sql: |
+    DROP TABLE IF EXISTS Documents;
+    DROP TABLE IF EXISTS Boxes;
+    CREATE TABLE Boxes 
+    (
+    ID SERIAL PRIMARY KEY,
+    NAME VARCHAR(50) NOT NULL,
+    CODE VARCHAR(20) NOT NULL UNIQUE
+    );
+    CREATE TABLE Documents (
+    ID SERIAL PRIMARY KEY,
+    NAME VARCHAR(50) NOT NULL,
+    CODE VARCHAR(20) NOT NULL UNIQUE,
+    BOX_ID INT,
+    foreign key (BOX_ID) references Boxes(ID)
+    );

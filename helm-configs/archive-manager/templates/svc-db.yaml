@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.name.service.db }}
+spec:
+  selector:
+    app: {{ .Values.selector.service.db }}
+  ports:
+    - name: {{ .Values.name.port.postgresql }}
+      protocol: TCP
+      port: {{ .Values.port.postgresql }}
+      targetPort: {{ .Values.name.port.postgresqlContainer }}

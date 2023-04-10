@@ -1,0 +1,37 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.name.ss.db }}
+  labels:
+    app: {{ .Values.label.ss.db }}
+spec:
+  serviceName: {{ .Values.name.ss.db }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.selector.deployment.db }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.selector.deployment.db }}
+    spec:
+      containers:
+        - name: {{ .Values.name.ss.container }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: {{ .Values.name.port.postgresqlContainer }}
+              containerPort: {{ .Values.port.postgresqlContainer }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: {{ .Values.name.volume.dbInitVolume }}
+              mountPath: /docker-entrypoint-initdb.d/
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.name.cm.dbConfig }}
+            - secretRef:
+                name: {{ .Values.name.secret.dbSecret }}
+      volumes:
+        - name: {{ .Values.name.volume.dbInitVolume }}
+          configMap:
+            name: {{ .Values.name.cm.dbConfig }}
