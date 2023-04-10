@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.name.service.app }}
+spec:
+  selector:
+    app: archive-manager
+  ports:
+    - name: {{ .Values.name.port.app }}
+      protocol: TCP
+      port: {{ .Values.port.app }}
+      targetPort: {{ .Values.name.port.appContainer }}

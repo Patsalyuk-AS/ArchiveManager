@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.name.deployment.app }}
+  labels:
+    app: {{ .Values.label.deployment.app }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.selector.deployment.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.selector.deployment.app }}
+    spec:
+      containers:
+        - name: {{ .Values.name.deployment.container }}
+          image: "{{ .Values.image.app.repository }}:{{ .Values.image.app.tag }}"
+          ports:
+            - name: {{ .Values.name.port.appContainer }}
+              containerPort: {{ .Values.port.appContainer }}
+          readinessProbe:
+            failureThreshold: {{ .Values.app.failureThreshold }}
+            httpGet:
+              path: /api/v1/archive-manager/actuator/health
+              port: {{ .Values.name.port.appContainer }}
+            initialDelaySeconds: {{ .Values.app.initialDelaySeconds }}
+          livenessProbe:
+            failureThreshold: {{ .Values.app.failureThreshold }}
+            httpGet:
+              path: /api/v1/archive-manager/actuator/health
+              port: {{ .Values.name.port.appContainer }}
+            initialDelaySeconds: {{ .Values.app.initialDelaySeconds }}
+          resources:
+            {{- toYaml .Values.resourcesApp | nindent 12 }}
+          volumeMounts:
+            - name: {{ .Values.name.volume.appConfig }}
+              mountPath: /app/config/
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.name.cm.dbConfig }}
+            - secretRef:
+                name: {{ .Values.name.secret.dbSecret }}
+      volumes:
+        - name: {{ .Values.name.volume.appConfig }}
+          configMap:
+            name: {{ .Values.name.cm.appConfig }}

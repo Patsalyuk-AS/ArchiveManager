@@ -9,20 +9,20 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.selector.deployment.db }}
+      app: {{ .Values.selector.ss.db }}
   template:
     metadata:
       labels:
-        app: {{ .Values.selector.deployment.db }}
+        app: {{ .Values.selector.ss.db }}
     spec:
       containers:
         - name: {{ .Values.name.ss.container }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.db.repository }}:{{ .Values.image.db.tag }}"
           ports:
             - name: {{ .Values.name.port.postgresqlContainer }}
               containerPort: {{ .Values.port.postgresqlContainer }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.resourcesDB | nindent 12 }}
           volumeMounts:
             - name: {{ .Values.name.volume.dbInitVolume }}
               mountPath: /docker-entrypoint-initdb.d/
