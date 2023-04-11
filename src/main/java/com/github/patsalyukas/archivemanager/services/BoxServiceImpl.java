@@ -8,6 +8,7 @@ import com.github.patsalyukas.archivemanager.repositories.BoxRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -15,6 +16,11 @@ import java.util.Set;
 public class BoxServiceImpl implements BoxService {
 
     private BoxRepository boxRepository;
+
+    @Override
+    public List<Box> getAllBoxes() {
+        return boxRepository.findAll();
+    }
 
     @Override
     public Box findBoxById(Long id) {

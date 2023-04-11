@@ -2,53 +2,65 @@ package com.github.patsalyukas.archivemanager.controllers;
 
 import com.github.patsalyukas.archivemanager.dto.BoxDTO;
 import com.github.patsalyukas.archivemanager.dto.DocumentDTO;
-import com.github.patsalyukas.archivemanager.entities.Box;
+import com.github.patsalyukas.archivemanager.mapper.BoxMapper;
+import com.github.patsalyukas.archivemanager.mapper.DocumentMapper;
 import com.github.patsalyukas.archivemanager.services.BoxService;
-import com.github.patsalyukas.archivemanager.services.MappingBoxService;
-import com.github.patsalyukas.archivemanager.services.MappingDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/boxes")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BoxController {
 
-    BoxService boxService;
-    MappingBoxService mappingBoxService;
-    MappingDocumentService mappingDocumentService;
+    private final BoxService boxService;
+    private final BoxMapper boxMapper;
+    private final DocumentMapper documentMapper;
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Find box by ID")
-    public BoxDTO findBoxById(@PathVariable Long id) {
-        Box box = boxService.findBoxById(id);
-        return (mappingBoxService.mapToBoxDTO(box));
+    @GetMapping(produces = "application/json")
+    @Operation(summary = "Get all boxes")
+    public List<BoxDTO> getAllBoxes() {
+        return boxMapper.toDTOList(boxService.getAllBoxes());
     }
 
-    @PostMapping("/")
+    @GetMapping(
+            value = "/{id}",
+            produces = "application/json"
+    )
+    @Operation(summary = "Find box by ID")
+    public BoxDTO findBoxById(@PathVariable Long id) {
+        return boxMapper.toDTO(boxService.findBoxById(id));
+    }
+
+    @PostMapping(produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create box")
     public BoxDTO create(@RequestBody BoxDTO boxDTO) {
-        Box box = mappingBoxService.mapToBoxEntity(boxDTO);
-        return mappingBoxService.mapToBoxDTO(boxService.create(box));
+        return boxMapper.toDTO(boxService.create(boxMapper.fromDTO(boxDTO)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            produces = "application/json"
+    )
     @Operation(summary = "Update box")
     public BoxDTO update(@PathVariable Long id, @RequestBody BoxDTO boxDTO) {
-        Box box = boxService.update(id, mappingBoxService.mapToBoxEntity(boxDTO));
-        return mappingBoxService.mapToBoxDTO(box);
+        return boxMapper.toDTO(boxService.update(id, boxMapper.fromDTO(boxDTO)));
     }
 
-    @GetMapping("/documents/{boxId}")
+    @GetMapping(
+            value = "/documents/{boxId}",
+            produces = "application/json"
+    )
     @Operation(summary = "Get documents in a box by box ID")
     public Set<DocumentDTO> getDocumentsInBox(@PathVariable Long boxId) {
-        return boxService.getDocumentsInBox(boxId).stream().map(mappingDocumentService::mapToDocumentDTO).collect(Collectors.toSet());
+        return boxService.getDocumentsInBox(boxId).stream().map(documentMapper::toDTO).collect(Collectors.toSet());
     }
 
 }

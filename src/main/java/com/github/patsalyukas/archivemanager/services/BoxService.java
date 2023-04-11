@@ -4,10 +4,13 @@ import com.github.patsalyukas.archivemanager.entities.Box;
 import com.github.patsalyukas.archivemanager.entities.Document;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
 public interface BoxService {
+
+    List<Box> getAllBoxes();
 
     Box findBoxById(Long id);
 
