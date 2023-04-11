@@ -8,6 +8,8 @@ public interface DocumentService {
 
     Document findDocumentById(Long id);
 
+    List<Document> getAllDocuments();
+
     Document create(Document document);
 
     Document update(Long id, Document document);

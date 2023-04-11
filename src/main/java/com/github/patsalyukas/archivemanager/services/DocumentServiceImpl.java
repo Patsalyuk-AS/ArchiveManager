@@ -6,20 +6,26 @@ import com.github.patsalyukas.archivemanager.exceptions.DocumentExist;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.DocumentRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DocumentServiceImpl implements DocumentService {
 
-    DocumentRepository documentRepository;
-    BoxService boxService;
+    private final DocumentRepository documentRepository;
+    private final BoxService boxService;
 
     @Override
     public Document findDocumentById(Long id) {
         return documentRepository.findById(id).orElseThrow(DocumentNotFoundException::new);
+    }
+
+    @Override
+    public List<Document> getAllDocuments() {
+        return documentRepository.findAll();
     }
 
     @Override

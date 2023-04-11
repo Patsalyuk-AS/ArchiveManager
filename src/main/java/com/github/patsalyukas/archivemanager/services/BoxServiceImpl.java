@@ -6,16 +6,17 @@ import com.github.patsalyukas.archivemanager.exceptions.BoxExist;
 import com.github.patsalyukas.archivemanager.exceptions.BoxNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.BoxRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BoxServiceImpl implements BoxService {
 
-    private BoxRepository boxRepository;
+    private final BoxRepository boxRepository;
 
     @Override
     public List<Box> getAllBoxes() {
