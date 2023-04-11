@@ -5,7 +5,6 @@ import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.BoxExist;
 import com.github.patsalyukas.archivemanager.exceptions.BoxNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.BoxRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,6 @@ import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentExist;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.DocumentRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
