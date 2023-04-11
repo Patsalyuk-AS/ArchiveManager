@@ -8,7 +8,7 @@ image:
   app:
     repository: pazas/archive-manager
     pullPolicy: IfNotPresent
-    tag: "1.0.5"
+    tag: "1.0.6"
 
 selector:
   ss:
