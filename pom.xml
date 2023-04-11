@@ -19,6 +19,19 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lombokMapstructBindingVersion>0.2.0</lombokMapstructBindingVersion>
+        <lombokVersion>1.18.26</lombokVersion>
+        <SpringBootVersion>3.0.4</SpringBootVersion>
+        <mapstructVersion>1.5.3.Final</mapstructVersion>
+        <mavenCompilerPluginVersion>3.5.1</mavenCompilerPluginVersion>
+        <jibMavenPluginVersion>3.2.1</jibMavenPluginVersion>
+        <mavenSurefirePluginVersion>3.0.0-M5</mavenSurefirePluginVersion>
+        <LiquibaseVersion>4.20.0</LiquibaseVersion>
+        <springDocVersion>1.6.15</springDocVersion>
+        <h2Version>2.1.214</h2Version>
+        <hibernateValidatorVersion>8.0.0.Final</hibernateValidatorVersion>
+        <validatorApiVersion>2.0.1.Final</validatorApiVersion>
+        <junitVersion>5.9.2</junitVersion>
     </properties>
 
     <dependencies>
@@ -52,29 +65,29 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.9.2</version>
+            <version>${junitVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
+            <version>${lombokVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
+            <version>${validatorApiVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>8.0.0.Final</version>
+            <version>${hibernateValidatorVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.214</version>
+            <version>${h2Version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -84,12 +97,17 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.15</version>
+            <version>${springDocVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.20.0</version>
+            <version>${LiquibaseVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstructVersion}</version>
         </dependency>
     </dependencies>
 
@@ -102,12 +120,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${mavenSurefirePluginVersion}</version>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${jibMavenPluginVersion}</version>
                 <configuration>
                     <from>
                         <image>openjdk:17-jdk</image>
@@ -118,6 +136,40 @@
                     <container>
                         <mainClass>com.github.patsalyukas.archivemanager.Main</mainClass>
                     </container>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${mavenCompilerPluginVersion}</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstructVersion}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombokVersion}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombokMapstructBindingVersion}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>
+                            -Amapstruct.defaultComponentModel=spring
+                        </arg>
+                        <arg>
+                            -Amapstruct.defaultInjectionStrategy=constructor
+                        </arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
