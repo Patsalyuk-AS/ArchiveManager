@@ -4,11 +4,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"boxDTO"})
 public class DocumentDTO {
+
+    @Schema(description = "ID of Document table")
+    private Long id;
 
     @NonNull
     @Schema(description = "Name of the document")

@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class BoxDTO {
+
+    @Schema(description = "ID of Box table")
+    private Long id;
 
     @NonNull
     @Schema(description = "Name of the box")

@@ -20,7 +20,7 @@ public class Box {
     @Column(name = "ID", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private long id;
+    private Long id;
 
     @NonNull
     @Column(name = "NAME", nullable = false)
