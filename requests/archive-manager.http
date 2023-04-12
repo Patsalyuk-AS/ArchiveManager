@@ -1,0 +1,79 @@
+#Get box by ID
+GET http://{{host}}/api/v1/archive-manager/boxes/5
+content-type: application/json
+
+###
+#Get all boxes
+GET http://{{host}}/api/v1/archive-manager/boxes
+content-type: application/json
+
+###
+#Create box
+POST http://{{host}}/api/v1/archive-manager/boxes
+content-type: application/json
+
+{
+    "name": "Box7",
+    "code": "b0007"
+}
+
+###
+#Update box
+PUT http://{{host}}/api/v1/archive-manager/boxes/41
+content-type: application/json
+
+{
+    "name": "Box8",
+    "code": "b0008"
+}
+
+###
+#Get documents in a box by box ID
+GET http://{{host}}/api/v1/archive-manager/boxes/documents/2
+content-type: application/json
+
+
+###
+#Get document by ID
+GET http://{{host}}/api/v1/archive-manager/documents/1
+content-type: application/json
+
+###
+#Get all documents
+GET http://{{host}}/api/v1/archive-manager/documents
+content-type: application/json
+
+###
+#Create document
+POST http://{{host}}/api/v1/archive-manager/documents
+content-type: application/json
+
+{
+    "name": "Document8",
+    "code": "d000008"
+}
+
+###
+#Update document
+PUT http://{{host}}/api/v1/archive-manager/documents/41
+content-type: application/json
+
+{
+    "name": "Document9",
+    "code": "d000009"
+}
+
+###
+#Put document in the box
+PUT http://{{host}}/api/v1/archive-manager/documents/box/21
+content-type: application/json
+
+{
+    "name": "Document9",
+    "code": "d000009"
+}
+
+###
+#Delete document out of the box
+DELETE http://{{host}}/api/v1/archive-manager/documents/41
+content-type: application/json
