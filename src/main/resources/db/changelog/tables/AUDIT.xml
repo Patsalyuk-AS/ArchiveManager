@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20230530-create-sq_audit" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="SQ_AUDIT"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="SQ_AUDIT" cacheSize="20" minValue="1" maxValue="9999999999999999" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="20230530-create-table-audit" author="patsalyuk-as" labels="task-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="AUDIT"/>
+            </not>
+        </preConditions>
+        <createTable tableName="AUDIT">
+            <column name="ID" type="bigint" defaultValueComputed="nextval('SQ_AUDIT')" remarks="Идентификатор таблицы AUDIT">
+                <constraints primaryKey="true" primaryKeyName="PK_AUDIT" nullable="false"/>
+            </column>
+            <column name="PRODUCT" type="varchar(50)" remarks="Продукт для доступа"/>
+            <column name="PRODUCT_CODE" type="varchar(20)" remarks="Код продукта к которому получен доступ"/>
+            <column name="CREATED_TIME" type="timestamp" remarks="Дата и время создания">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+<!--    <changeSet author="patsalyuk-as" id="20230530-alter-sq_AUDIT" labels="task-1">-->
+<!--        <sql>ALTER SEQUENCE SQ_AUDIT OWNED BY AUDIT.ID;</sql>-->
+<!--    </changeSet>-->
+
+</databaseChangeLog>

@@ -1,10 +1,12 @@
-package com.github.patsalyukas.archivemanager.services;
+package com.github.patsalyukas.archivemanager.services.imlp;
 
+import com.github.patsalyukas.archivemanager.annotation.LogExecutionTime;
 import com.github.patsalyukas.archivemanager.entities.Box;
 import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.BoxExist;
 import com.github.patsalyukas.archivemanager.exceptions.BoxNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.BoxRepository;
+import com.github.patsalyukas.archivemanager.services.BoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@LogExecutionTime
 public class BoxServiceImpl implements BoxService {
 
     private final BoxRepository boxRepository;

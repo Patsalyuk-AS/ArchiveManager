@@ -78,4 +78,8 @@ resourcesApp:
 app:
   failureThreshold: 10
   initialDelaySeconds: 30
-  host: archive-manager.apps.okd.sbc-openshift.ru
+  host: sbercode-689e7374-cfe7-49ba-9229-d452f66d1284-work.apps.sbc-okd.pcbltools.ru
+  domain: apps.sbc-okd.pcbltools.ru
+
+oc:
+  namespace: sbercode-689e7374-cfe7-49ba-9229-d452f66d1284-work

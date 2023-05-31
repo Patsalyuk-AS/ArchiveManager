@@ -1,10 +1,13 @@
-package com.github.patsalyukas.archivemanager.services;
+package com.github.patsalyukas.archivemanager.services.imlp;
 
+import com.github.patsalyukas.archivemanager.annotation.LogExecutionTime;
 import com.github.patsalyukas.archivemanager.entities.Box;
 import com.github.patsalyukas.archivemanager.entities.Document;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentExist;
 import com.github.patsalyukas.archivemanager.exceptions.DocumentNotFoundException;
 import com.github.patsalyukas.archivemanager.repositories.DocumentRepository;
+import com.github.patsalyukas.archivemanager.services.BoxService;
+import com.github.patsalyukas.archivemanager.services.DocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@LogExecutionTime
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;

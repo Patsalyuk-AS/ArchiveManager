@@ -6,7 +6,7 @@ metadata:
     app: {{ .Values.label.ingress.app }}
 spec:
   rules:
-    - host: {{ .Values.app.host }}
+    - host: "{{ .Values.oc.namespace }}.{{ .Values.app.domain }}"
       http:
         paths:
           - path: /api/v1/archive-manager

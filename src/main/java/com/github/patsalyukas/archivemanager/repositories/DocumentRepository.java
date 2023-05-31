@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     Optional<Document> findByCode(String code);

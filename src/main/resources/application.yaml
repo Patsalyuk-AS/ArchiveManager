@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /api/v1/archive-manager
 spring:
+  profiles:
+    active: ${PROFILE:}
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${POSTGRESQL_URL}/${POSTGRESQL_DATABASE}
@@ -16,8 +18,18 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health, metrics, prometheus"
+        include: "*"
   metrics:
     export:
       prometheus:
         enabled: true
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL_ROOT:info}
+    org:
+      springframework: ${LOGGING_LEVEL_SPRING:info}
+      hibernate: ${LOGGING_LEVEL_HIBERNATE:info}
+
+archivemanager:
+  ratelimit: ${ARCHIVEMANAGER_RATELIMIT:10}

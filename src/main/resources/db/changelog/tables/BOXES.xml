@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="20230408-create-sq_boxes" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-create-sq_boxes" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="SQ_BOXES"/>
@@ -12,7 +12,7 @@
         <createSequence sequenceName="SQ_BOXES" cacheSize="20" minValue="1" maxValue="9999999999999999" incrementBy="1"/>
     </changeSet>
 
-    <changeSet id="20230408-create-table-boxes" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-create-table-boxes" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="BOXES"/>
@@ -31,11 +31,11 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="patsalyuk-as" id="20230408-alter-sq_boxes" labels="task-1">
-        <sql>ALTER SEQUENCE SQ_BOXES OWNED BY BOXES.ID;</sql>
-    </changeSet>
+<!--    <changeSet author="patsalyuk-as" id="20230530-alter-sq_boxes" labels="task-1">-->
+<!--        <sql>ALTER SEQUENCE SQ_BOXES OWNED BY BOXES.ID;</sql>-->
+<!--    </changeSet>-->
 
-    <changeSet id="20230408-insert-boxes-b0001" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-insert-boxes-b0001" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from boxes b where b.code='b0001'</sqlCheck>
         </preConditions>
@@ -45,7 +45,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="20230408-insert-boxes-b0002" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-insert-boxes-b0002" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from boxes b where b.code='b0002'</sqlCheck>
         </preConditions>
@@ -55,7 +55,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="20230408-insert-boxes-b0003" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-insert-boxes-b0003" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from boxes b where b.code='b0003'</sqlCheck>
         </preConditions>
@@ -65,7 +65,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="20230408-insert-boxes-b0004" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-insert-boxes-b0004" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from boxes b where b.code='b0004'</sqlCheck>
         </preConditions>
@@ -75,7 +75,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="20230408-insert-boxes-b0005" author="patsalyuk-as" labels="task-1">
+    <changeSet id="20230530-insert-boxes-b0005" author="patsalyuk-as" labels="task-1">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from boxes b where b.code='b0005'</sqlCheck>
         </preConditions>
